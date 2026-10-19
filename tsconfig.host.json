@@ -1,0 +1,19 @@
+{
+  "extends": "./tsconfig.base.json",
+  "compilerOptions": {
+    "rootDir": "src",
+    "outDir": "lib",
+    "declaration": true,
+    "types": [
+      "node"
+    ],
+    "tsBuildInfoFile": "./node_modules/.cache/subscription-manager/host.tsbuildinfo"
+  },
+  "include": [
+    "src/**/*.ts"
+  ],
+  "exclude": [
+    "src/locales.ts",
+    "src/styles.ts"
+  ]
+}

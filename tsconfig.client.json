@@ -1,0 +1,5 @@
+{
+  "extends": "./tsconfig.base.json",
+  "compilerOptions": { "module": "ESNext", "moduleResolution": "Bundler", "noEmit": true, "types": ["react"], "tsBuildInfoFile": "./node_modules/.cache/subscription-manager/client.tsbuildinfo" },
+  "include": ["src/client.tsx", "src/locales.ts", "src/protocol.ts", "src/styles.ts"]
+}

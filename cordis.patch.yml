@@ -1,0 +1,3 @@
+- insert:
+    - id: subscription-manager
+      name: 'dsh-subscription-manager'
