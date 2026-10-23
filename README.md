@@ -123,3 +123,9 @@ Client 是原生 `settings.section`，全部产品文案使用中英文字典，
 ### Dev Note
 
 无。
+
+
+## Private registry distribution
+
+This build is distributed as `dsh-subscription-manager` through `https://registry.antistudio.cn/`. Update checks use `https://registry.antistudio.cn/index.json`; package downloads use the npm credentials configured in the active DSH profile. GitHub hosts source code and issue reports.
+

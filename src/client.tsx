@@ -36,9 +36,10 @@ interface Actions {
 }
 type PageProps = PropsRuntime<'settings.section'> & PropsLocale<'subscription-manager'> & InjectFace<Actions>
 
-/** Check this repository's stable releases without replacing the installed plugin. */
+/** Check the private registry's public version index. */
 function UpdateButton({ t }: Pick<PageProps, 't'>) {
   const [open, setOpen] = useState(false)
+  const [copied, setCopied] = useState(false)
   const [result, setResult] = useState<{ phase: 'checking' | 'ready' | 'unpublished' | 'error'; version?: string }>({ phase: 'checking' })
   const request = useRef<AbortController | null>(null)
   useEffect(() => () => { request.current?.abort() }, [])
@@ -48,20 +49,26 @@ function UpdateButton({ t }: Pick<PageProps, 't'>) {
     const controller = new AbortController()
     request.current = controller
     setOpen(true)
+    setCopied(false)
     setResult({ phase: 'checking' })
     try {
-      const response = await fetch('https://api.github.com/repos/laoqiu/dsh-subscription-manager/releases/latest', {
-        credentials: 'omit', headers: { accept: 'application/vnd.github+json' }, signal: AbortSignal.any([controller.signal, AbortSignal.timeout(8000)]),
+      const response = await fetch('https://registry.antistudio.cn/index.json', {
+        credentials: 'omit', headers: { accept: 'application/json' }, signal: AbortSignal.any([controller.signal, AbortSignal.timeout(8000)]),
       })
       if (controller.signal.aborted) return
       if (response.status === 404) { setResult({ phase: 'unpublished' }); return }
       if (!response.ok) throw new Error('Release request failed')
-      const release = z.object({ tag_name: z.string().regex(/^v\d+\.\d+\.\d+$/), draft: z.literal(false), prerelease: z.literal(false) }).parse(await response.json())
-      if (!controller.signal.aborted) setResult({ phase: 'ready', version: release.tag_name.slice(1) })
+      const index = z.object({ format: z.literal(1), plugins: z.array(z.object({ name: z.string(), versions: z.array(z.object({ version: z.string(), source: z.object({ type: z.string(), registry: z.string().optional() }) })) })) }).parse(await response.json())
+      const release = index.plugins.find(plugin => plugin.name === 'dsh-subscription-manager')?.versions
+        .filter(item => /^\d+\.\d+\.\d+$/.test(item.version) && item.source.type === 'npm' && item.source.registry === 'https://registry.antistudio.cn/')
+        .sort((left, right) => right.version.localeCompare(left.version, 'en', { numeric: true }))[0]
+      if (!release) { setResult({ phase: 'unpublished' }); return }
+      if (!controller.signal.aborted) setResult({ phase: 'ready', version: release.version })
     } catch (error) {
       if (!controller.signal.aborted) setResult({ phase: 'error' })
     }
   }
+  const updateAddress = result.version ? `https://registry.antistudio.cn/dsh-subscription-manager/-/dsh-subscription-manager-${result.version}.tgz` : ''
   const status = result.phase === 'ready'
     ? result.version!.localeCompare(PLUGIN_VERSION, 'en', { numeric: true }) > 0 ? 'updateAvailable' : 'upToDate'
     : result.phase === 'checking' ? 'checkingUpdates' : result.phase === 'unpublished' ? 'noRelease' : 'updateCheckFailed'
@@ -70,9 +77,10 @@ function UpdateButton({ t }: Pick<PageProps, 't'>) {
       icon={<HeaderIcon name="refresh" />} onClick={() => { void check() }} /></Tooltip>
     <Modal open={open} title={t('checkUpdates')} closeLabel={t('close')} onClose={close}
       footer={<div className="sub-update-actions"><Button variant="outline" disabled={result.phase === 'checking'} onClick={() => { void check() }}>{t('checkAgain')}</Button>
-        <Button variant="primary" disabled={result.phase !== 'ready'} onClick={() => { if (result.version) window.open(`https://github.com/laoqiu/dsh-subscription-manager/releases/tag/v${result.version}`, '_blank', 'noreferrer') }}>{t('viewRelease')}</Button></div>}>
+        <Button variant="primary" disabled={result.phase !== 'ready'} onClick={() => { if (updateAddress) void navigator.clipboard?.writeText(updateAddress).then(() => setCopied(true)).catch(() => setCopied(false)) }}>{t(copied ? 'copiedUpdateUrl' : 'viewRelease')}</Button></div>}>
       <div className="sub-update"><p>{t('currentVersion')} · v{PLUGIN_VERSION}</p>
         {result.version && <p>{t('latestVersion')} · v{result.version}</p>}
+        {updateAddress && <><p>{t('updateHint')}</p><code style={{ display: 'block', overflowWrap: 'anywhere', fontSize: 12 }}>{updateAddress}</code></>}
         <p role={result.phase === 'error' ? 'alert' : 'status'}>{result.phase === 'checking' && <StateDot state="ongoing" />} {t(status)}</p>
       </div>
     </Modal>
