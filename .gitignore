@@ -5,3 +5,7 @@ node_modules/
 *.tsbuildinfo
 .env
 .env.*
+.npm-cache/
+.npmrc
+*.npmrc
+*.key

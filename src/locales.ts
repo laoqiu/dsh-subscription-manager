@@ -1,5 +1,9 @@
 /** Complete English and Chinese product copy. */
 export const en = {
+  checkUpdates: 'Check for updates', checkingUpdates: 'Checking for updates…', checkAgain: 'Check again',
+  currentVersion: 'Current version', latestVersion: 'Latest version', viewRelease: 'View release', close: 'Close',
+  updateAvailable: 'A new version is available', upToDate: 'Already up to date', noRelease: 'No stable release has been published yet', updateCheckFailed: 'Could not check for updates. Please retry.',
+  subtitle: 'Manage subscription accounts, usage and available models.', viewProject: 'GitHub', feedback: 'Issues',
   available: 'available',
   'callback-busy': 'Sign-in callback ports are occupied. Close other sign-in windows and retry',
   chatgptUsage: 'View plan usage and app limits in ChatGPT',
@@ -13,6 +17,10 @@ export const en = {
 } as const
 export type Key = keyof typeof en
 export const zh: Record<Key, string> = {
+  checkUpdates: '检查更新', checkingUpdates: '正在检查更新…', checkAgain: '重新检查',
+  currentVersion: '当前版本', latestVersion: '最新版本', viewRelease: '查看发布版本', close: '关闭',
+  updateAvailable: '发现新版本', upToDate: '已是最新版本', noRelease: '尚未发布正式版本', updateCheckFailed: '检查更新失败，请稍后重试',
+  subtitle: '管理订阅账号、用量与可用模型', viewProject: 'GitHub', feedback: '问题反馈',
   available: '可用',
   'callback-busy': '授权回调端口被占用，请关闭其他登录窗口后重试',
   chatgptUsage: '在 ChatGPT 查看套餐用量与应用限额',

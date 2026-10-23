@@ -7,7 +7,7 @@ kind: package-bundle
 
 ## 摘要
 
-在 **设置 → 订阅** 登录已有订阅，查看平台返回的用量，并将账号模型加入 DSH 原生模型选择器。适配 DSH `0.2.1-alpha.2`，每个平台一个账号，提供退出登录、刷新用量和刷新模型。纯 DSH 插件，单包构建，无额外服务或 MCP 入口。仓库为 [laoqiu/dsh-subscription-manager](https://github.com/laoqiu/dsh-subscription-manager)，当前尚未发布到 npm。订阅菜单图标由 DSH 设置外壳提供，部分宿主可能显示齿轮。默认使用原 Codex 链路，新的 ChatGPT 公共 API 实现可通过配置保留切换；认证方式与已保存凭据不同的账号需重新登录，见[升级说明](docs/UPGRADING.md)。
+在 **设置 → 订阅** 登录已有订阅，查看平台返回的用量，并将账号模型加入 DSH 原生模型选择器。适配 DSH `0.2.1-rc.2`，每个平台一个账号，提供退出登录、刷新用量和刷新模型。纯 DSH 插件，单包构建，无额外服务或 MCP 入口。仓库为 [laoqiu/dsh-subscription-manager](https://github.com/laoqiu/dsh-subscription-manager)，当前尚未发布到 npm。订阅菜单图标由 DSH 设置外壳提供，部分宿主可能显示齿轮。默认使用原 Codex 链路，新的 ChatGPT 公共 API 实现可通过配置保留切换；认证方式与已保存凭据不同的账号需重新登录，见[升级说明](docs/UPGRADING.md)。
 
 ## 目录
 
@@ -31,7 +31,7 @@ kind: package-bundle
 
 ## 安装与开发
 
-适配 **DSH 0.2.1-alpha.2**，需要 Node.js `^22.19.0 || >=24`。在 Desktop 的「插件 → 添加插件」中输入 GitHub 归档地址：
+适配 **DSH 0.2.1-rc.2**，需要 Node.js `^22.19.0 || >=24`。在 Desktop 的「插件 → 添加插件」中输入 GitHub 归档地址：
 
 ```text
 https://github.com/laoqiu/dsh-subscription-manager/archive/refs/heads/main.tar.gz
@@ -63,6 +63,8 @@ npm pack
 测试使用本地 HTTP / HTTP2 服务与脱敏数据，不读取用户 token，不触发付费推理；自动测试不代替目标账号的 OAuth、额度和模型调用验收。
 
 ## 使用与数据
+
+设置页标题旁显示插件版本，下方显示简介；右侧图标依次提供检查更新、GitHub 和问题反馈，统一右对齐且悬停提示显示在下方；页面出现滚动条时保持位置一致。账号内保留用量与模型刷新操作。检查更新对比本仓库最新的 `vX.Y.Z` 正式 GitHub Release，并提供发布说明入口；尚未发布或查询失败时明确提示，检查本身不安装插件。
 
 点击平台「登录」，在链接打开的平台页面完成授权；设备授权额外显示短码，可随时取消。登录提交后并行读取模型和用量；账号列表等待首次读取完成后返回，不需手动刷新才能显示额度。其中一项失败不会清空另一项。已保存账号在插件加载时恢复，模型目录更新通过 DSH 原生 LLM 通知链发布。
 
