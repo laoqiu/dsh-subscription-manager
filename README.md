@@ -7,7 +7,7 @@ kind: package-bundle
 
 ## 摘要
 
-在 **设置 → 订阅** 登录已有订阅，查看平台返回的用量，并将账号模型加入 DSH 原生模型选择器。适配 DSH `0.2.1-rc.2`，每个平台一个账号，提供退出登录、刷新用量和刷新模型。纯 DSH 插件，单包构建，无额外服务或 MCP 入口。仓库为 [laoqiu/dsh-subscription-manager](https://github.com/laoqiu/dsh-subscription-manager)，当前尚未发布到 npm。订阅菜单图标由 DSH 设置外壳提供，部分宿主可能显示齿轮。默认使用原 Codex 链路，新的 ChatGPT 公共 API 实现可通过配置保留切换；认证方式与已保存凭据不同的账号需重新登录，见[升级说明](docs/UPGRADING.md)。
+在 **设置 → 订阅** 登录已有订阅，查看平台返回的用量，并将账号模型加入 DSH 原生模型选择器。适配 DSH `0.2.x`（含预发布版），每个平台一个账号，提供退出登录、刷新用量和刷新模型。纯 DSH 插件，单包构建，无额外服务或 MCP 入口。仓库为 [laoqiu/dsh-subscription-manager](https://github.com/laoqiu/dsh-subscription-manager)，当前尚未发布到 npm。订阅菜单图标由 DSH 设置外壳提供，部分宿主可能显示齿轮。默认使用原 Codex 链路，新的 ChatGPT 公共 API 实现可通过配置保留切换；认证方式与已保存凭据不同的账号需重新登录，见[升级说明](docs/UPGRADING.md)。
 
 ## 目录
 
@@ -31,7 +31,7 @@ kind: package-bundle
 
 ## 安装与开发
 
-适配 **DSH 0.2.1-rc.2**，需要 Node.js `^22.19.0 || >=24`。在 Desktop 的「插件 → 添加插件」中输入 GitHub 归档地址：
+适配 **DSH 0.2.x（含预发布版）**，需要 Node.js `^22.19.0 || >=24`。在 Desktop 的「插件 → 添加插件」中输入 GitHub 归档地址：
 
 ```text
 https://github.com/laoqiu/dsh-subscription-manager/archive/refs/heads/main.tar.gz
@@ -129,3 +129,7 @@ Client 是原生 `settings.section`，全部产品文案使用中英文字典，
 
 This build is distributed as `dsh-subscription-manager` through `https://registry.antistudio.cn/`. Update checks use `https://registry.antistudio.cn/index.json`; package downloads use the npm credentials configured in the active DSH profile. GitHub hosts source code and issue reports.
 
+
+## 宿主版本范围
+
+支持 DSH 0.2.x（含 alpha / rc），通过 `engines.dsh: ">=0.2.0-0 <0.3.0-0"` 声明，不再逐个列出宿主版本。开发依赖固定在 0.2.1-rc.5，用于可复现构建；插件使用宿主提供的 DSH SDK。版本范围不等于每个历史或未来版本均经过实测，当前官方客户端验证版本为 0.2.1-rc.5。
